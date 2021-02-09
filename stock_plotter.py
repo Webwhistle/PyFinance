@@ -6,7 +6,7 @@ import pandas as pd
 import pandas_datareader.data as web
 import numpy as np
 
-def stock_scraper(stock, horizon = 'Short', plot = False):
+def stock_scraper(stock, horizon = 'Short'):
     """
     Collects and samples existing financial data over a chosen stock and time
     period. Plots with MA-crossovers for either short och long term time interval.
@@ -70,37 +70,36 @@ def stock_scraper(stock, horizon = 'Short', plot = False):
         period_result = sum(absolute_difference)
         #print('Period result: ' + str(period_result))
 
+    """ Plots adjusted close price, two different MA:s and their crossover
+        with volume. """
+
+    plt.figure(figsize=(8,8))
+
+    ax1 = plt.subplot2grid((6,1),(0,0),rowspan=5, colspan=1)
+    ax2 = plt.subplot2grid((6,1),(5,0),rowspan=1, colspan=1, sharex=ax1)
+
+    ax1.set_title(str(name))
+    ax1.set_ylabel("SEK")
+    ax2.set_ylabel("Volym")
+
+    ax1 = plt.subplot2grid((6,1),(0,0),rowspan=5, colspan=1, label = str(name))
+    plt.title(str(name))
+    plt.plot(x, close, label = 'Adj Close', color = 'steelblue')
+    plt.plot(x, f, '-', label = f_label, color = 'darkorange')
+    plt.plot(x, g, '-', label = g_label, color = 'darkkhaki')
+
+    plt.plot(x[idx], f[idx], 'o', color = 'purple', label = 'ma-crossover')
+    plt.plot(x[idx], close[idx], '-', color =  'seagreen', label = 'Crossover Adj Close Result')
+
+    ax2 = plt.subplot2grid((6,1),(5,0),rowspan=1, colspan=1, sharex=ax1)
+    plt.bar(x, df['Volume'], color = 'steelblue')
+
+    ax1.legend(loc='best')
+
+    plt.show()
+
     # Returns result based on crossover trading and opening price
     return period_result, close[0]
-
-    if plot == True:
-        """ Plots adjusted close price, two different MA:s and their crossover
-            with volume. """
-
-        plt.figure(figsize=(8,8))
-
-        ax1 = plt.subplot2grid((6,1),(0,0),rowspan=5, colspan=1)
-        ax2 = plt.subplot2grid((6,1),(5,0),rowspan=1, colspan=1, sharex=ax1)
-
-        ax1.set_title(str(name))
-        ax1.set_ylabel("SEK")
-        ax2.set_ylabel("Volym")
-
-        ax1 = plt.subplot2grid((6,1),(0,0),rowspan=5, colspan=1, label = str(name))
-        plt.title(str(name))
-        plt.plot(x, close, label = 'Adj Close', color = 'steelblue')
-        plt.plot(x, f, '-', label = f_label, color = 'darkorange')
-        plt.plot(x, g, '-', label = g_label, color = 'darkkhaki')
-
-        plt.plot(x[idx], f[idx], 'o', color = 'purple', label = 'ma-crossover')
-        plt.plot(x[idx], close[idx], '-', color =  'seagreen', label = 'Crossover Adj Close Result')
-
-        ax2 = plt.subplot2grid((6,1),(5,0),rowspan=1, colspan=1, sharex=ax1)
-        plt.bar(x, df['Volume'], color = 'steelblue')
-
-        ax1.legend(loc='best')
-
-        plt.show()
 
 bolag = ['SWMA.ST', 'AZN', 'ATCO-B.ST', 'ERIC-B.ST', 'SKF-B.ST',
 'SEB-A.ST', 'ITAB-B.ST', 'VOLV-B.ST', 'HM-B.ST', 'ALFA.ST', 'ASSA-B.ST',
@@ -120,6 +119,7 @@ def plot_companies(how_many = len(bolag), horizon = 'Short'):
         total_price += price
     return results, total_price
 
+"""
 results, total_price = plot_companies()
 negative = 0
 for i in results:
@@ -130,3 +130,7 @@ print('Losers: ' + str(negative))
 print('Winners: ' + str(len(results)-negative))
 print('Total value ' + str(total_price))
 print('Totalt result: ' + str(sum(results)))
+"""
+
+stock_scraper('CRAD-B.ST', 'Short')
+stock_scraper('EVO.ST', 'Short')
