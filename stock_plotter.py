@@ -21,8 +21,8 @@ def stock_scraper(stock, horizon = 'Short'):
 
     df = web.DataReader(stock, 'yahoo', start, end)
 
-    df.to_csv(str(name)+'.csv')
-    df = pd.read_csv(str(name)+'.csv', parse_dates = True, index_col=0)
+    df.to_csv('stock_data.csv')
+    df = pd.read_csv('stock_data.csv', parse_dates = True, index_col=0)
 
     df['5ma'] = df['Adj Close'].rolling(window=5).mean()
     df['20ma'] = df['Adj Close'].rolling(window=20).mean()
