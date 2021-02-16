@@ -132,5 +132,4 @@ print('Total value ' + str(total_price))
 print('Totalt result: ' + str(sum(results)))
 """
 
-stock_scraper('ANOT.ST', 'Long')
-stock_scraper('ANOT.ST', 'Short')
+stock_scraper('TSLA', 'Short')
